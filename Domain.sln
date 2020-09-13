@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B842E564-CFEF-419C-A206-F21CF1D273BF}"
 	ProjectSection(SolutionItems) = preProject
-		..\Domain.sln.DotSettings = ..\Domain.sln.DotSettings
-		..\LICENSE = ..\LICENSE
-		..\README.md = ..\README.md
+		Domain.sln.DotSettings = Domain.sln.DotSettings
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{E3E1ECCD-C543-4994-9022-8960ECF7643A}"

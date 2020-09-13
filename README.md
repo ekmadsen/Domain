@@ -1,2 +1,2 @@
 # Domain
-Defines Repository and Unit of Work patterns.
+Defines factory, repository and unit of work patterns.
