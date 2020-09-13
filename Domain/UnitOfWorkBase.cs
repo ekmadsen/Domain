@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using ErikTheCoder.Logging;
 using JetBrains.Annotations;
 
 
@@ -8,13 +9,17 @@ namespace ErikTheCoder.Domain
     [UsedImplicitly]
     public abstract class UnitOfWorkBase : IUnitOfWork
     {
+        [UsedImplicitly] protected readonly ILogger Logger;
+        [UsedImplicitly] protected readonly Guid CorrelationId;
         private IDbTransaction _transaction;
         private bool _committed;
         private bool _disposed;
 
 
-        protected UnitOfWorkBase(IDbConnection Connection)
+        protected UnitOfWorkBase(ILogger Logger, Guid CorrelationId, IDbConnection Connection)
         {
+            this.Logger = Logger;
+            this.CorrelationId = CorrelationId;
             _transaction = Connection.BeginTransaction();
         }
 
