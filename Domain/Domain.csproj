@@ -5,10 +5,27 @@
     <RootNamespace>ErikTheCoder.Domain</RootNamespace>
     <AssemblyName>ErikTheCoder.Domain</AssemblyName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Erik Madsen</Authors>
+    <Company>Erik Madsen</Company>
+    <Product>ErikTheCoder.Domain</Product>
+    <Description>Defines factory, repository and unit of work patterns.</Description>
+    <Copyright>2020</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/ekmadsen/Domain</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ekmadsen/Domain</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>domain factory-pattern repository-pattern unit-of-work-pattern</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
