@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
+using ErikTheCoder.Data;
 using ErikTheCoder.Logging;
 using JetBrains.Annotations;
 
@@ -11,16 +13,18 @@ namespace ErikTheCoder.Domain
     {
         [UsedImplicitly] protected readonly ILogger Logger;
         [UsedImplicitly] protected readonly Guid CorrelationId;
+        private DbConnection _dbConnection;
         private IDbTransaction _transaction;
         private bool _committed;
         private bool _disposed;
 
 
-        protected UnitOfWorkBase(ILogger Logger, Guid CorrelationId, IDbConnection Connection)
+        protected UnitOfWorkBase(ILogger Logger, ICorrelationIdAccessor CorrelationIdAccessor, ILoggedDatabase Database)
         {
             this.Logger = Logger;
-            this.CorrelationId = CorrelationId;
-            _transaction = Connection.BeginTransaction();
+            CorrelationId = CorrelationIdAccessor.GetCorrelationId();
+            _dbConnection = Database.OpenConnection(CorrelationId);
+            _transaction = _dbConnection.BeginTransaction();
         }
 
 
@@ -39,7 +43,7 @@ namespace ErikTheCoder.Domain
                 // Rollback uncommitted transaction.
                 try
                 {
-                    _transaction.Rollback();
+                    _transaction?.Rollback();
                 }
                 catch
                 {
@@ -48,22 +52,25 @@ namespace ErikTheCoder.Domain
             }
             if (Disposing)
             {
-                // Free managed objects.
+                // No managed objects to release.
             }
-            // Free unmanaged objects.
+            // Release unmanaged objects.
             _transaction?.Dispose();
             _transaction = null;
+            _dbConnection?.Dispose();
+            _dbConnection = null;
+            // Do not release logger.  Its lifetime is controlled by caller.
             _disposed = true;
         }
 
 
         public void Commit()
         {
-            _transaction.Commit();
+            _transaction?.Commit();
             _committed = true;
         }
 
 
-        void IUnitOfWork.Rollback() => _transaction.Rollback();
+        void IUnitOfWork.Rollback() => _transaction?.Rollback();
     }
 }
