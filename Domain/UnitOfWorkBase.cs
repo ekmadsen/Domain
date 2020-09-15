@@ -41,14 +41,7 @@ namespace ErikTheCoder.Domain
             if (!_committed)
             {
                 // Rollback uncommitted transaction.
-                try
-                {
-                    _transaction?.Rollback();
-                }
-                catch
-                {
-                    // Ignore exception.
-                }
+                _transaction?.TryRollback();
             }
             if (Disposing)
             {
@@ -66,11 +59,10 @@ namespace ErikTheCoder.Domain
 
         public void Commit()
         {
-            _transaction?.Commit();
-            _committed = true;
+            _committed = _transaction?.TryCommit() ?? false;
         }
 
 
-        void IUnitOfWork.Rollback() => _transaction?.Rollback();
+        void IUnitOfWork.Rollback() => _transaction?.TryRollback();
     }
 }
