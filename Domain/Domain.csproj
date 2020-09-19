@@ -15,11 +15,11 @@
     <RepositoryUrl>https://github.com/ekmadsen/Domain</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>domain factory-pattern repository-pattern unit-of-work-pattern</PackageTags>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ErikTheCoder.Data" Version="1.0.9" />
+    <PackageReference Include="ErikTheCoder.Data" Version="1.0.10" />
     <PackageReference Include="ErikTheCoder.Logging" Version="1.0.12" />
     <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
   </ItemGroup>

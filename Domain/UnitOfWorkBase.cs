@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Threading.Tasks;
 using ErikTheCoder.Data;
 using ErikTheCoder.Logging;
 using JetBrains.Annotations;
@@ -13,6 +14,7 @@ namespace ErikTheCoder.Domain
     {
         [UsedImplicitly] protected readonly ILogger Logger;
         [UsedImplicitly] protected readonly Guid CorrelationId;
+        private ILoggedDatabase _database;
         private DbConnection _dbConnection;
         private IDbTransaction _transaction;
         private bool _committed;
@@ -23,8 +25,7 @@ namespace ErikTheCoder.Domain
         {
             this.Logger = Logger;
             CorrelationId = CorrelationIdAccessor.GetCorrelationId();
-            _dbConnection = Database.OpenConnection(CorrelationId);
-            _transaction = _dbConnection.BeginTransaction();
+            _database = Database;
         }
 
 
@@ -45,7 +46,8 @@ namespace ErikTheCoder.Domain
             }
             if (Disposing)
             {
-                // No managed objects to release.
+                // Release managed objects.
+                _database = null;
             }
             // Release unmanaged objects.
             _transaction?.Dispose();
@@ -57,12 +59,20 @@ namespace ErikTheCoder.Domain
         }
 
 
-        public void Commit()
+        public async Task BeginAsync()
         {
-            _committed = _transaction?.TryCommit() ?? false;
+            _dbConnection = await _database.OpenConnectionAsync(CorrelationId);
+            _transaction = _dbConnection.BeginTransaction();
         }
 
 
-        void IUnitOfWork.Rollback() => _transaction?.TryRollback();
+        public void Commit()
+        {
+            _transaction.Commit();
+            _committed = true;
+        }
+
+
+        public void Rollback() => _transaction.Rollback();
     }
 }
