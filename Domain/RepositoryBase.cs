@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.Common;
+using System.Data;
 using System.Threading.Tasks;
 using ErikTheCoder.Data;
 using ErikTheCoder.Logging;
@@ -13,7 +13,7 @@ namespace ErikTheCoder.Domain
         [UsedImplicitly] protected readonly ILogger Logger;
         [UsedImplicitly] protected readonly Guid CorrelationId;
         [UsedImplicitly] private readonly ILoggedDatabase _database;
-        [UsedImplicitly] public Func<Task<(DbConnection Connection, bool IsSharedConnection)>> GetDbConnectionAsync; // For use by Unit of Work classes.
+        [UsedImplicitly] public Func<Task<(IDbConnection Connection, bool IsSharedConnection)>> GetDbConnectionAsync; // For use by Unit of Work classes.
 
         
         protected RepositoryBase(ILogger Logger, ICorrelationIdAccessor CorrelationIdAccessor, ILoggedDatabase Database)
@@ -31,10 +31,10 @@ namespace ErikTheCoder.Domain
         }
 
 
-        public async Task<(DbConnection Connection, DbTransaction Transaction, bool DisposeDbResources)> GetDbResourcesAsync()
+        public async Task<(IDbConnection Connection, IDbTransaction Transaction, bool DisposeDbResources)> GetDbResourcesAsync()
         {
             var (connection, isSharedConnection) = await GetDbConnectionAsync();
-            DbTransaction transaction;
+            IDbTransaction transaction;
             bool disposeDbResources;
             if (isSharedConnection)
             {

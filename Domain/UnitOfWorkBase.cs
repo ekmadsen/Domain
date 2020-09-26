@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Threading.Tasks;
 using ErikTheCoder.Data;
 using ErikTheCoder.Logging;
@@ -15,7 +14,7 @@ namespace ErikTheCoder.Domain
         [UsedImplicitly] protected readonly ILogger Logger;
         [UsedImplicitly] protected readonly Guid CorrelationId;
         private ILoggedDatabase _database;
-        private DbConnection _dbConnection;
+        private IDbConnection _dbConnection;
         private IDbTransaction _transaction;
         private bool _committed;
         private bool _disposed;
