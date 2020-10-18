@@ -28,6 +28,9 @@ namespace ErikTheCoder.Domain
         }
 
 
+        ~UnitOfWorkBase() => Dispose(false);
+
+
         public void Dispose()
         {
             Dispose(true);
